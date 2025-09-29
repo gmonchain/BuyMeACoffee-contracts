@@ -14,6 +14,8 @@ contract BuyMeACoffee {
 
     );
 
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
 
     //Memo Struct
     struct Memo{
@@ -67,6 +69,17 @@ contract BuyMeACoffee {
     */
     function unpause() public onlyOwner whenPaused {
         paused = false;
+    }
+
+    /*
+    *   @dev Update the owner of the contract.
+    *   @param _newOwner The address of the new owner.
+    */
+    function updateOwner(address payable _newOwner) public onlyOwner {
+        require(_newOwner != address(0), "New owner cannot be the zero address");
+        address oldOwner = owner;
+        owner = _newOwner;
+        emit OwnershipTransferred(oldOwner, _newOwner);
     }
 
     /*
