@@ -20,6 +20,9 @@ async function main() {
   await buyMeACoffee.deployed();
 
   console.log("BuyMeACoffee deployed to:", buyMeACoffee.address);
+
+  const pausedStatus = await buyMeACoffee.paused();
+  console.log("Contract initially paused status:", pausedStatus);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

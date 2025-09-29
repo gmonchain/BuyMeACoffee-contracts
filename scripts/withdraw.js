@@ -21,6 +21,9 @@ async function main() {
   // Instantiate connected contract.
   const buyMeACoffee = new hre.ethers.Contract(contractAddress, contractABI, signer);
 
+  const pausedStatus = await buyMeACoffee.paused();
+  console.log("Contract paused status:", pausedStatus);
+
   // Check starting balances.
   console.log("current balance of owner: ", await getBalance(provider, signer.address), "ETH");
   const contractBalance = await getBalance(provider, buyMeACoffee.address);

@@ -30,13 +30,44 @@ contract BuyMeACoffee {
     //Address of the contract deployer
     address payable owner;
 
+    bool private paused;
+
 
     //Deploy logic
 
     constructor() {
         owner = payable(msg.sender);
+        paused = false;
     }
 
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this function");
+        _;
+    }
+
+    modifier whenNotPaused() {
+        require(!paused, "Contract is paused");
+        _;
+    }
+
+    modifier whenPaused() {
+        require(paused, "Contract is not paused");
+        _;
+    }
+
+    /*
+    *   @dev Pause the contract. Only owner can call this.
+    */
+    function pause() public onlyOwner whenNotPaused {
+        paused = true;
+    }
+
+    /*
+    *   @dev Unpause the contract. Only owner can call this.
+    */
+    function unpause() public onlyOwner whenPaused {
+        paused = false;
+    }
 
     /*
     *   @dev buy a cofee for contract owner
@@ -44,7 +75,7 @@ contract BuyMeACoffee {
     *   @param _message a nice message from the coffee buyer
     *
     */
-    function buyCoffee(string memory _name,string memory _message) public payable{ 
+    function buyCoffee(string memory _name,string memory _message) public payable whenNotPaused{
 
         require(msg.value >0 , "Can't buy coffee with 0 eth");
 
@@ -72,7 +103,7 @@ contract BuyMeACoffee {
     *   @dev send the entire balance stored in this contract to the owner
     *   
     */
-    function withdrawTips() public {
+    function withdrawTips() public onlyOwner whenNotPaused {
         require(owner.send(address(this).balance));
     }
 

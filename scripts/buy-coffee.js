@@ -39,6 +39,9 @@ async function main() {
   await buyMeACoffee.deployed();
   console.log("BuyMeACoffee deployed to:", buyMeACoffee.address);
 
+  const pausedStatus = await buyMeACoffee.paused();
+  console.log("Contract paused status:", pausedStatus);
+
   // Check balances before the coffee purchase.
   const addresses = [owner.address, tipper.address, buyMeACoffee.address];
   console.log("== start ==");
